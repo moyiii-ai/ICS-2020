@@ -114,16 +114,39 @@ int func4(int x, int y, int z) {
 
 * **Phase_6: linked lists/pointers/structs**
 
-&emsp;&emsp;阅读phase_6，发现它再次调用read_six_numbers。读入后循环检查6个数，先检查它是否大于6，再检查其他数是否和它相等，若大于6或者有重复则引爆炸弹，说明要求这是一个1-6的排列。
+&emsp;&emsp;阅读phase_6，发现它再次调用read_six_numbers。读入后循环检查6个数，先检查它是否大于6，再检查其他数是否和它相等，若大于6或者有重复则引爆炸弹，说明要求这是一个1-6的排列。之后程序将每个数x都转换为了7-x。
 
-&emsp;&emsp;之后程序将每个数x都转换为了7-x，然后根据链表中
+&emsp;&emsp;然后发现又有一个可疑的地址0x6032d0，尝试输出后发现它大概每个node有4个数，于是对应输入的6个数字，输出24个数，显然它应当为一个结构体。
+
+&emsp;&emsp;阅读代码发现它要按照结构体的第一个变量排序，使得排序后第二个变量和我们处理过的7-x依次相等。结构体里第一维从大到小的顺序为3 4 5 6 1 2，则输入应为4 3 2 1 6 5。
 
 ![avatar](list.png)
 
 * **Secret_phase**
 
+&emsp;&emsp;最后用Ctri+F寻找哪里调用了secret_phase，发现是在phase_defused。输出调用前后的几个字符串如下，说明有一个位置输入了两个int和一个字符串，如果字符串等于DrEvil，则可以解开秘密关卡。
+
 ![avatar](intosecret.png)
+
+&emsp;&emsp;回忆解题过程，我们在phase_3、4均输入了两个int，但是究竟哪个位置才是目标位置，不妨分别在解题时在两个位置输入a和b，然后用gdb在phase_defused设置断点，输出%rdi，如下图结果为b，说明应当在phase_4答案后空一格输入DrEvil。
+
 ![avatar](position.png)
+
+&emsp;&emsp;进入秘密关卡后发现它要求输入一个数，以它为第二个参数，36为第一个参数调用func7，如果结果为2则拆除炸弹。将func7翻译成C语言如下：
+
+~~~C
+int func7(void *x, int y) {
+    if(*x == 0)  return 0xffffffff;
+    if(*x <= y) {
+        if(*x == y)  return 0;
+        else return 2 * func7(*(x + 16), y) + 1;
+    }
+    else return 2 * func(*(x + 8));
+}
+~~~
+
+&emsp;&emsp;可以发现，为了得到2，我们需要第一层返回0，第二层返回1，第三层返回2。y是我们输入的值，分别输入满足上一层要求的值以进入下一层，用gdb在三层输出*x内的值，第一层要求y<36，第二层要求y>8，第三层直接给出y=22。
+
 ![avatar](cell1.png)
 ![avatar](cell2.png)
 ![avatar](cell3.png)
