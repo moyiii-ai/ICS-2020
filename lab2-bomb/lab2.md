@@ -50,7 +50,7 @@ IONEFG/yo^uvw等任何ASCII码后四位依次为9、F、E、5、6、7的六位�
 
 * **Phase_1: string comparison**
 
-&emsp;&emsp;阅读Phase_1函数，发现400ee4处将0x402400赋给%esi。下一行即调用string_not_equal，其返回值为0则可跳过explode_bomb。
+&emsp;&emsp;阅读Phase_1函数，发现0x400ee4处将0x402400赋给%esi。下一行即调用string_not_equal，其返回值为0则可跳过explode_bomb。
 
 &emsp;&emsp;阅读string_not_equal，发现它的功能和名字一样，就是先比较%rdi和%rsi长度是否相等，再按位比较。若两个字符串相等则返回0。
 
@@ -106,11 +106,11 @@ int func4(int x, int y, int z) {
 
 &emsp;&emsp;阅读phase_5，首先习惯性地输出两个可疑地址0x4024b0和0x40245e，发现前者为一个长字符串，后者为flyers。
 
+![avatar](phase_5.png)
+
 &emsp;&emsp;按执行顺序阅读程序，首先调用string_length，如果字符串长度不为6就引爆炸弹。然后执行了六次循环，依次取出字符串中的一位，将它与15作为在长字符串中取字符的偏移值，把取到的数依次放入%rsp为开头的一段栈中。最后检查取出的字符串是否和flyers相等，若相等则炸弹拆除。
 
 &emsp;&emsp;观察长字符串中，flyers分别为第9、F、E、5、6、7位，因此只需要输入的字符串与15和上述数列相同。字符串对应的16进制数可通过man ascii指令查询。
-
-![avatar](phase_5.png)
 
 * **Phase_6: linked lists/pointers/structs**
 
@@ -128,20 +128,20 @@ int func4(int x, int y, int z) {
 
 ![avatar](intosecret.png)
 
-&emsp;&emsp;回忆解题过程，我们在phase_3、4均输入了两个int，但是究竟哪个位置才是目标位置，不妨分别在解题时在两个位置输入a和b，然后用gdb在phase_defused设置断点，输出%rdi，如下图结果为b，说明应当在phase_4答案后空一格输入DrEvil。
+&emsp;&emsp;回忆解题过程，我们在phase_3、4均输入了两个int，但是究竟哪个位置才是目标位置，不妨分别在两个位置输入a和b，然后用gdb在phase_defused设置断点，输出%rdi，如下图结果为b，说明应当在phase_4答案后空一格输入DrEvil。
 
 ![avatar](position.png)
 
 &emsp;&emsp;进入秘密关卡后发现它要求输入一个数，以它为第二个参数，36为第一个参数调用func7，如果结果为2则拆除炸弹。将func7翻译成C语言如下：
 
 ~~~C
-int func7(void *x, int y) {
-    if(*x == 0)  return 0xffffffff;
+int func7(int *x, int y) {
+    if(x == 0)  return 0xffffffff;
     if(*x <= y) {
         if(*x == y)  return 0;
-        else return 2 * func7(*(x + 16), y) + 1;
+        return 2 * func7(*(x + 16), y) + 1;
     }
-    else return 2 * func(*(x + 8));
+    return 2 * func(*(x + 8));
 }
 ~~~
 
@@ -157,6 +157,6 @@ int func7(void *x, int y) {
 
 2. 熟悉了汇编语言的指令，体会了组织汇编语言的方法。
 
-3. read_line的好处在于读入了一行字符之后，后续可以再次用read_six_number等函数反复处理，给secret_phase的隐藏留下了空间。
+3. read_line的好处在于读入了一行字符之后，后续可以再次用read_six_numbers等函数反复处理，给secret_phase的隐藏留下了空间。
 
-4. 由于lab2、lab3是接连做的，写完lab3的报告再来写lab2报告忽然觉得对汇编的具体细节清楚了很多，这可能就是“读”与“用”之间的差距吧。
+4. 由于lab2、lab3是接连做的，写完lab3的报告再来写lab2报告，忽然觉得对汇编的具体细节清楚了很多，这可能就是“读”与“用”之间的差距吧。
