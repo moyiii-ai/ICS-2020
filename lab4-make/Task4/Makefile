@@ -7,4 +7,4 @@ main:
 .PHONY : clean
 clean :
 	@rm *.o -f
- 	@rm main -f
+	@rm main -f
