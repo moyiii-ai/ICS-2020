@@ -3,6 +3,6 @@
 int main(){
     testPrint();
     testPrint(5);
-    notATest();
+    //notATest();
     return 0;
 }
