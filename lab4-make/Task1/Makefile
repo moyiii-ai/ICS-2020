@@ -1,10 +1,16 @@
 #也许可以在这里也加点指令
 
+DE = main1 Debug=True
+
 main0:
-	@g++ main0.cpp function0.cpp shared.cpp -o main
+	g++ main0.cpp function0.cpp function1.cpp shared.cpp -o main0
 	
 main1:
-	@#添加编译命令
+	ifeq( ,DE)
+		g++ main1.cpp function0.cpp -DDEBUG function1.cpp shared.cpp -o main1
+	else
+		g++ main1.cpp function0.cpp function1.cpp shared.cpp -o main1
+	endif
 	
 #下面的不用改
 .PHONY : clean
