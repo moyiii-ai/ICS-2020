@@ -1,6 +1,8 @@
 
 main : 
-    
+	cd A && make mainA
+	cd C && make mainC
+	g++ main.cpp -lA -LA -lB -LB -lC -LC -o main
 
 #下面的不用改
 .PHONY : clean
