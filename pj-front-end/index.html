@@ -1,0 +1,386 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" 
+    content="width=device-width,
+    initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Y86-Sim</title>
+    <link
+    href="./semantic/dist/semantic.min.css" 
+    rel="stylesheet" 
+    type="text/css">
+    <script 
+    src="./jquery.min.js"></script>
+    <script 
+    src="./semantic/dist/semantic.min.js"></script>
+    <script
+    src="./work.js">
+    </script>
+    <link rel="stylesheet" href="./me.css">
+    <style type="text/css">
+      body {background-color:#f2fdf7}
+    </style>
+</head>
+
+  <body>
+    <!--top-->
+    <nav class="ui inverted attached segment m-padded-tb-mini">
+      <div class="ui inverted secondary menu">
+        <div class="ui container">
+          <h2 class="ui teal header item m-padded-tb-mini">Y86-Sim</h2>
+          <div class="ui button item" onclick="BackWard()"><i class="left arrow icon"></i></div>
+          <div class="ui button item" onclick="PlayPause()">
+            <i class="play icon" style="display:block" id="play"></i>
+            <i class="pause icon" style="display:none" id="pause"></i>
+          </div>
+          <div class="ui button item"><i class="right arrow icon" onclick="ForWard()"></i></div>
+          <div class="ui button item" id="uploadbtn">
+            <i class="file icon"></i>
+          </div>
+          <input type="file" id="upload" style="display: none;"/>
+          <div class="ui item m-f" id="f">
+            f=10/50
+          </div>
+          <div class="ui right item">
+            <div class="box">
+              <div class="bar">
+                <div class="line">
+                  <div class="dot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ui right item m-clk" id="clock">
+            CLOCK=0/0
+          </div>
+          <div class="ui right item">
+            <div class="box2">
+              <div class="bar2">
+                <div class="line2">
+                  <div class="dot2"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ui right container item">
+            Created by Renatus,Moyi
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!--function-->
+    <script>
+      slide("box","line");  
+      slide2("box2", "line2");
+      FileLoad();
+    </script>
+
+    <!--code reg and mem-->
+    <div class="m-padded-tb-big">
+      <div class="container m-padded-mini">
+        <div class="ui grid">
+          <!--code-->
+          <div class="five wide column m-padded-tb-mini">
+            <div class="ui top attached secondary segment m-padded-tb-tiny">INPUT</div>
+            <div class="ui bottom attached segment m-codesize">
+              <pre class="m-pre fluid" id="code"></pre>
+            </div>
+          </div>
+          <!--conditions and reg-->
+          <div class="six wide column m-padded-tb-mini">
+            <div class="segments">
+              <!--conditions-->
+              <div class="ui top attached secondary segment m-padded-tb-tiny">CONDITIONS</div>
+              <div class="ui attached segment m-padded-tb-tiny">
+                <div class="ui three column grid">
+                  <div class="column">
+                    <div class="ui middle aligned three column grid">
+                      <div class="one column">ZF</div>
+                      <div class="two column" id="z1">-</div>
+                    </div> 
+                  </div>
+                  <div class="column">
+                    <div class="ui middle aligned three column grid">
+                      <div class="one column">SF</div>
+                      <div class="two column" id="z2">-</div>
+                    </div> 
+                  </div>
+                  <div class="column">
+                    <div class="ui middle aligned three column grid">
+                      <div class="one column">OF</div>
+                      <div class="two column" id="z3">-</div>
+                    </div> 
+                  </div>
+                </div>
+              </div>
+              <!--reg-->
+              <div class="ui attached secondary segment m-padded-tb-tiny">REGISTERS</div>
+              <div class="ui attached segment m-padded-tb-tiny">
+                <div class="ui two column grid">
+                  <div class="column">
+                    <div class="ui middle aligned three column grid">
+                      <div class="one column">%eax</div>
+                      <div class="two column" id="r1">0x00000000</div>
+                    </div> 
+                  </div>
+                  <div class="column">
+                    <div class="ui middle aligned three column grid">
+                      <div class="one column">%ecx</div>
+                      <div class="two column" id="r2">----</div>
+                    </div> 
+                  </div>
+                </div>
+              </div>
+              <div class="ui attached segment m-padded-tb-tiny">
+                <div class="ui two column grid">
+                  <div class="column">
+                    <div class="ui middle aligned three column grid">
+                      <div class="one column">%edx</div>
+                      <div class="two column" id="r3">----</div>
+                    </div> 
+                  </div>
+                  <div class="column">
+                    <div class="ui middle aligned three column grid">
+                      <div class="one column">%ebx</div>
+                      <div class="two column" id="r4">----</div>
+                    </div> 
+                  </div>
+                </div>
+              </div>
+              <div class="ui attached segment m-padded-tb-tiny">
+                <div class="ui two column grid">
+                  <div class="column">
+                    <div class="ui middle aligned three column grid">
+                      <div class="one column">%esp</div>
+                      <div class="two column" id="r5">----</div>
+                    </div> 
+                  </div>
+                  <div class="column">
+                    <div class="ui middle aligned three column grid">
+                      <div class="one column">%ebp</div>
+                      <div class="two column" id="r6">----</div>
+                    </div> 
+                  </div>
+                </div>
+              </div>
+              <div class="ui bottom attached segment m-padded-tb-tiny">
+                <div class="ui two column grid">
+                  <div class="column">
+                    <div class="ui middle aligned three column grid">
+                      <div class="one column">%esi</div>
+                      <div class="two column" id="r7">----</div>
+                    </div> 
+                  </div>
+                  <div class="column">
+                    <div class="ui middle aligned three column grid">
+                      <div class="one column">%edi</div>
+                      <div class="two column" id="r8">----</div>
+                    </div> 
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
+          <!--mem-->
+          <div class="five wide column m-padded-tb-mini">
+            <div class="ui top attached secondary segment m-padded-tb-tiny">MEMORY</div>
+            <div class="ui attached segment m-padded-tb-tiny">
+              <div class="ui middle aligned three column grid">
+                <div class="one column" id="mi1">0000</div>
+                <div class="two column" id="mv1">----</div>
+              </div>
+            </div>
+            <div class="ui attached segment m-padded-tb-tiny">
+              <div class="ui middle aligned three column grid">
+                <div class="one column" id="mi2">0001</div>
+                <div class="two column" id="mv2">----</div>
+              </div>
+            </div>
+            <div class="ui attached segment m-padded-tb-tiny">
+              <div class="ui middle aligned three column grid">
+                <div class="one column" id="mi3">0002</div>
+                <div class="two column" id="mv3">----</div>
+              </div>
+            </div>
+            <div class="ui attached segment m-padded-tb-tiny">
+              <div class="ui middle aligned three column grid">
+                <div class="one column" id="mi4">0003</div>
+                <div class="two column" id="mv4">----</div>
+              </div>
+            </div>
+            <div class="ui attached segment m-padded-tb-tiny">
+              <div class="ui middle aligned three column grid">
+                <div class="one column" id="mi5">0004</div>
+                <div class="two column" id="mv5">----</div>
+              </div>
+            </div>
+            <div class="ui bottom attached segment m-padded-tb-tiny">
+              <div class="ui middle aligned three column grid">
+                <div class="one column" id="mi6">0005</div>
+                <div class="two column" id="mv6">----</div>
+              </div>
+            </div>
+          </div>  
+        </div>
+      </div>  
+    </div>
+
+    <!--cpu-->
+    <div class="m-padded-tb-mini">
+      <div class="container m-padded-mini">
+        <div class="ui top attached segment m-padded-tb-tiny">
+          <div class="ui middle aligned ten column grid">
+            <div class="one column">FETCH</div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">f_pc</div>
+              <div class="m-big m-text m-padded-tb-mini" id="f1">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">imem_instr</div>
+              <div class="m-big m-text m-padded-tb-mini" id="f2">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">f_instr</div>
+              <div class="m-big m-text m-padded-tb-mini" id="f3">----</div>
+            </div>
+          </div>
+        </div>
+        <div class="ui attached segment m-padded-tb-tiny">
+          <div class="ui middle aligned ten column grid">
+            <div class="one column">DECODE</div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">instr</div>
+              <div class="m-text m-padded-tb-mini" id="d1">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">rA</div>
+              <div class="m-text m-padded-tb-mini" id="d2">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">rB</div>
+              <div class="m-text m-padded-tb-mini" id="d3">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">valC</div>
+              <div class="m-text m-padded-tb-mini" id="d4">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">valP</div>
+              <div class="m-text m-padded-tb-mini" id="d5">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">Stat</div>
+              <div class="m-text m-padded-tb-mini" id="d6">----</div>
+            </div>
+          </div>
+        </div>
+        <div class="ui attached segment m-padded-tb-tiny">
+          <div class="ui middle aligned ten column grid">
+            <div class="one column">EXECUTE</div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">instr</div>
+              <div class="m-big m-text m-padded-tb-mini" id="e1">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">valC</div>
+              <div class="m-big m-text m-padded-tb-mini" id="e2">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">valA</div>
+              <div class="m-big m-text m-padded-tb-mini" id="e3">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">valB</div>
+              <div class="m-big m-text m-padded-tb-mini" id="e4">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">srcA</div>
+              <div class="m-big m-text m-padded-tb-mini" id="e5">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">srcB</div>
+              <div class="m-big m-text m-padded-tb-mini" id="e6">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">dstE</div>
+              <div class="m-big m-text m-padded-tb-mini" id="e7">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">dstM</div>
+              <div class="m-big m-text m-padded-tb-mini" id="e8">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">Stat</div>
+              <div class="m-big m-text m-padded-tb-mini" id="e9">----</div>
+            </div>
+          </div>
+        </div>
+        <div class="ui attached segment m-padded-tb-tiny">
+          <div class="ui middle aligned ten column grid">
+            <div class="one column">MEMORY</div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">instr</div>
+              <div class="m-big m-text m-padded-tb-mini" id="m1">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">Cnd</div>
+              <div class="m-big m-text m-padded-tb-mini" id="m2">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">valE</div>
+              <div class="m-big m-text m-padded-tb-mini" id="m3">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">valA</div>
+              <div class="m-big m-text m-padded-tb-mini" id="m4">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">dstE</div>
+              <div class="m-big m-text m-padded-tb-mini" id="m5">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">dstM</div>
+              <div class="m-big m-text m-padded-tb-mini" id="m6">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">Stat</div>
+              <div class="m-big m-text m-padded-tb-mini" id="m7">----</div>
+            </div>
+          </div>
+        </div>
+        <div class="ui bottom attached segment m-padded-tb-tiny">
+          <div class="ui middle aligned ten column grid">
+            <div class="one column">WRITEBACK</div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">instr</div>
+              <div class="m-big m-text m-padded-tb-mini" id="w1">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">valE</div>
+              <div class="m-big m-text m-padded-tb-mini" id="w2">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">valM</div>
+              <div class="m-big m-text m-padded-tb-mini" id="w3">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">dstE</div>
+              <div class="m-big m-text m-padded-tb-mini" id="w4">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">dstM</div>
+              <div class="m-big m-text m-padded-tb-mini" id="w5">----</div>
+            </div>
+            <div class="one column">
+              <div class="m-mini m-text m-padded-tb-mini">Stat</div>
+              <div class="m-big m-text m-padded-tb-mini" id="w6">----</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

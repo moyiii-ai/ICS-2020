@@ -1,0 +1,18 @@
+理想输出：
+(52)(1)(0)(0)(nop)(----)(----)(0x0)
+
+对应原输出：
+Cycle 0. CC=Z=1 S=0 O=0, Stat=AOK
+F: predPC = 0x0
+D: instr = nop, rA = ----, rB = ----, valC = 0x0, valP = 0x0, Stat = BUB
+E: instr = nop, valC = 0x0, valA = 0x0, valB = 0x0
+   srcA = ----, srcB = ----, dstE = ----, dstM = ----, Stat = BUB
+M: instr = nop, Cnd = 0, valE = 0x0, valA = 0x0
+   dstE = ----, dstM = ----, Stat = BUB
+W: instr = nop, valE = 0x0, valM = 0x0, dstE = ----, dstM = ----, Stat = BUB
+	Fetch: f_pc = 0x0, imem_instr = halt, f_instr = halt
+
+第一个括号里是周期数
+之后每个周期按FETCH、D、E、M、W顺序，有3+8+6+6+3+6+9+7+6=54个括号，分别是conditions、reg、mem和5个阶段
+mem的6+6个括号，是(地址)(值)(地址)(值)的格式，可以在C++里处理一下，输出最近有变化的吗？没有变化就保持上一次？
+

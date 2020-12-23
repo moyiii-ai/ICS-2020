@@ -1,0 +1,176 @@
+/*---size---*/
+
+.m-padded-big {
+    padding: 0.2em !important;
+}
+
+.m-padded-tb-mini {
+    padding-top: 0.2em !important;
+    padding-bottom: 0.2em !important;
+}
+
+.m-padded-tb-tiny {
+    padding-top: 0.5em !important;
+    padding-bottom: 0.5em !important;
+}
+
+.m-padded-tb-small {
+    padding-top: 1em !important;
+    padding-bottom: 1em !important;
+}
+
+.m-padded-tb-big {
+    padding-top: 2em !important;
+    padding-bottom: 2em !important;
+}
+
+.m-padded-tb-large {
+    padding-top: 3em !important;
+    padding-bottom: 3em !important;
+}
+
+.m-padded-tb-huge {
+    padding-top: 4em !important;
+    padding-bottom: 4em !important;
+}
+
+.m-padded-mini {
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+}
+
+.m-pre {
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    *word-wrap: break-word;
+    *white-space : normal ;
+
+}
+
+.m-line {
+    height: 50px !important;
+}
+
+.m-mini {
+    width: 40px !important;
+    height: 15px !important;
+}
+
+.m-codesize {
+    width: 70px;
+    height: 208px;
+    overflow-y: auto;
+    box-sizing:border-box;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    *word-wrap: break-word;
+    *white-space : normal ;
+    font-weight: 300 !important;
+
+}
+
+.m-f {
+    width: 53px;
+}
+
+.m-clk {
+    width: 120px;
+}
+
+/*---text---*/
+.m-text {
+    font-weight: 300 !important;
+    letter-spacing: 1px !important;
+    font-weight: 300 !important;
+}
+.m-text-thin {
+    font-weight: 300 !important;
+}
+
+.m-text-spaced {
+    letter-spacing: 1px !important;
+}
+
+.m-text-lined {
+    line-height: 1.8 !important;
+}
+
+/*---display---*/
+.m-inline-block {
+    display: inline-block !important;
+}
+
+/*---slide1---*/
+.box{
+    border-radius: 25px;
+    width: 100px;
+    height: 25px;
+    overflow: hidden;
+    cursor: pointer;
+    padding:0 10px;
+    box-sizing:border-box;
+}
+
+.bar{
+    border-radius: 25px;
+    width:100%;
+    height: 4px;
+    background:#f2fdf7;
+    margin-top:12px ;
+}
+
+.line{
+    width:20%;
+    height:100%;
+    background:#1cb5c9;
+    position: relative;
+}
+
+.dot{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #1cb5c9;
+    position: absolute;
+    right: -4px;
+    top:-3px;
+}
+
+/*---slide2---*/
+.box2{
+    width: 150px;
+    height: 25px;
+    overflow: hidden;
+    cursor: pointer;
+    padding:0 10px;
+    box-sizing:border-box;
+}
+
+.bar2{
+    border-radius: 25px;
+    width:100%;
+    height: 4px;
+    background:#f2fdf7;
+    margin-top:12px ;
+}
+
+.line2{
+    width:0px;
+    height:100%;
+    background:#1cb5c9;
+    position: relative;
+}
+
+.dot2{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #1cb5c9;
+    position: absolute;
+    right: -4px;
+    top:-3px;
+}
