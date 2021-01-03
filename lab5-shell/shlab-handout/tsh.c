@@ -378,20 +378,19 @@ void waitfg(pid_t pid)
 void sigchld_handler(int sig) 
 {
     pid_t pid;
-    int status;
-    int old_errno = errno;
-    sigset_t mask_empty, mask_all, mask_pre;
-    sigemptyset(&mask_empty);
+    int statusp;
+    int olderrno = errno;
+    sigset_t mask_all, mask_pre;
     sigfillset(&mask_all);
-    while ((pid = waitpid(-1, &status, WNOHANG | WUNTRACED)) > 0) {
+    while((pid = waitpid(-1, &statusp, WNOHANG | WUNTRACED)) > 0) {
         sigprocmask(SIG_BLOCK, &mask_all, &mask_pre);
-        if (WIFSTOPPED(status)) {
+        if(WIFSTOPPED(statusp)) {
             struct job_t *job = getjobpid(jobs, pid);
             job->state = ST;
-            printf("Job [%d] (%d) stopped by signal %d\n",job->jid, pid, WSTOPSIG(status));
+            printf("Job [%d] (%d) stopped by signal %d\n",job->jid, pid, WSTOPSIG(statusp));
         }
         else {
-            if (WIFSIGNALED(status)) {
+            if(WIFSIGNALED(statusp)) {
                 struct job_t *job = getjobpid(jobs, pid);
                 printf("Job [%d] (%d) terminated by signal %d\n", job->jid, job->pid, WTERMSIG(status));
             } 
@@ -399,7 +398,7 @@ void sigchld_handler(int sig)
         }
         sigprocmask(SIG_SETMASK, &mask_pre, NULL);
     }
-    errno = old_errno;
+    errno = olderrno;
     return;
 }
 
