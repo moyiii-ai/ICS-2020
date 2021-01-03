@@ -377,7 +377,7 @@ void waitfg(pid_t pid)
  */
 void sigchld_handler(int sig) 
 {
-     pid_t pid;
+    pid_t pid;
     int status;
     int old_errno = errno;
     sigset_t mask_empty, mask_all, mask_pre;
@@ -411,10 +411,17 @@ void sigchld_handler(int sig)
 void sigint_handler(int sig) 
 {
     pid_t pid;
-    int old_errno = errno;
-    if ((pid = fgpid(jobs)) != 0)
+    int olderrno = errno;
+    sigset_t mask_all, mask_pre;
+    sigfillset(&mask_all);
+
+    sigprocmask(SIG_SETMASK, &mask_all, &mask_pre);
+    pid = fgpid(jobs);
+    sigprocmask(SIG_SETMASK, &mask_pre, NULL);
+
+    if(pid != 0)
         kill(-pid, SIGINT);
-    errno = old_errno;
+    errno = olderrno;
     return;
 }
 
@@ -426,11 +433,17 @@ void sigint_handler(int sig)
 void sigtstp_handler(int sig) 
 {
     pid_t pid;
-    int old_errno = errno;
+    int olderrno = errno;
+    sigset_t mask_all, mask_pre;
+    sigfillset(&mask_all);
+
+    sigprocmask(SIG_SETMASK, &mask_all, &mask_pre);
     pid = fgpid(jobs);
-    if (pid)
-        kill(-pid, sig);
-    errno = old_errno;
+    sigprocmask(SIG_SETMASK, &mask_pre, NULL);
+    
+    if(pid != 0)
+        kill(-pid, SIGTSTP);
+    errno = olderrno;
     return;
 }
 
