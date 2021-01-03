@@ -295,30 +295,23 @@ void do_bgfg(char **argv)
         return;
     }
     char * idstring = argv[1];
-    int isjid = 0;
-    int id;
-    if(idstring[0]=='%') {
+    int isjid = 0, id;
+    if(idstring[0] == '%') {
         isjid = 1;
-        id = atoi(idstring+1);
-        if(!id) {
-            printf("%s: argument must be a PID or %%jobid\n", argv[0]);
-            return;
-        }
+        id = atoi(idstring + 1);
     }
-    else {
-        id = atoi(idstring);
-        if(!id) {
-            printf("%s: argument must be a PID or %%jobid\n", argv[0]);
-            return;
-        }
+    else id = atoi(idstring);
+    if(!id) {
+        printf("%s: argument must be a PID or %%jobid\n", argv[0]);
+        return;
     }
-    sigset_t mask_empty, mask_all, mask_pre;
-    sigemptyset(&mask_empty);
+
+    sigset_t mask_all, mask_pre;
     sigfillset(&mask_all);
     sigprocmask(SIG_SETMASK, &mask_all, &mask_pre);
-    if (isjid) {
+    if(isjid) {
         job = getjobjid(jobs, id);
-        if (!job) {
+        if(!job) {
             printf("%%%d: No such job\n", id);
             sigprocmask(SIG_SETMASK, &mask_pre, NULL);
             return;
@@ -332,18 +325,19 @@ void do_bgfg(char **argv)
             return;
         }
     }
+
     pid_t pid = job->pid;
-    if(!strcmp(argv[0], "bg")) {
-        job->state = BG;
-        printf("[%d] (%d) %s",job->jid,job->pid,job->cmdline);
-        kill(-pid, SIGCONT);
-    }
-    else if(!strcmp(argv[0], "fg")) {
+    if(!strcmp(argv[0], "fg")) {
         job->state = FG;
         kill(-pid, SIGCONT);
         sigprocmask(SIG_SETMASK, &mask_pre, NULL);
         waitfg(pid);
         return;
+    }
+    if(!strcmp(argv[0], "bg")) {
+        job->state = BG;
+        printf("[%d] (%d) %s", job->jid, job->pid, job->cmdline);
+        kill(-pid, SIGCONT);
     }
     sigprocmask(SIG_SETMASK, &mask_pre, NULL);
     return;
@@ -392,7 +386,7 @@ void sigchld_handler(int sig)
         else {
             if(WIFSIGNALED(statusp)) {
                 struct job_t *job = getjobpid(jobs, pid);
-                printf("Job [%d] (%d) terminated by signal %d\n", job->jid, job->pid, WTERMSIG(status));
+                printf("Job [%d] (%d) terminated by signal %d\n", job->jid, job->pid, WTERMSIG(statusp));
             } 
             deletejob(jobs, pid);
         }
